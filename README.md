@@ -11,8 +11,8 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them
 
 ```
-[Node.js](https://nodejs.org) - JavaScript run-time environment
-[.NET Core 2.1 SDK](https://www.microsoft.com/net/download) - Software framework 
+* Node.js - [https://nodejs.org]
+* .NET Core 2.1 SDK - [https://www.microsoft.com/net/download] 
 ```
 
 ### Installing
