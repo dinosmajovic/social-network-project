@@ -106,6 +106,30 @@ namespace SocialNetwork.API.Controllers
             return Ok(commentsToReturn);
         }
 
+        [HttpPost]
+        [Route("/api/posts/{id}/comments")]
+        public async Task<IActionResult> CreateComment(int id, [FromBody] CreateCommentDto createCommentDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            
+            var commentToCreate = new Comment {
+                CommentText = createCommentDto.CommentText,
+                DateCommented = DateTime.Now,
+                CommenterId = currentUserId,
+                PostId = id
+            };
+
+            _repo.Add(commentToCreate);
+
+            if (await _repo.SaveAll())
+                return StatusCode(201);
+
+            throw new Exception("Failed on save.");
+        }
+
         // GET request to get a sigle post by passing the post's id
         [HttpGet]
         [Route("/api/posts/{id}")]
@@ -124,7 +148,7 @@ namespace SocialNetwork.API.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            //hello
+
             var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             var likeExists = await _repo.GetLike(id, currentUserId);

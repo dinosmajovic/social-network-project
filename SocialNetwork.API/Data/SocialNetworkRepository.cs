@@ -62,14 +62,6 @@ namespace SocialNetwork.API.Data
             return post;
         }
 
-       /* public async Task<Post> CreatePost(int currentId, CreatePostDto createPostDto)
-        {
-            var lastPost = await _context.Posts.OrderByDescending(u => u.Id).FirstOrDefaultAsync();
-            var id = lastPost.Id +1;
-            
-            return lastPost;
-        }*/
-
         public async Task<IEnumerable<Comment>> GetComments(int id)
         {
             var comments = await _context.PostComments.Where(c => c.PostId == id).ToListAsync();
