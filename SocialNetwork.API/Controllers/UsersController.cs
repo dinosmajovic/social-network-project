@@ -164,6 +164,28 @@ namespace SocialNetwork.API.Controllers
             throw new Exception("Failed on save.");
         }
 
+        [HttpPut]
+        [Route("/api/posts/{id}")]
+        public async Task<IActionResult> EditPost(int id, [FromBody] EditPostDto editPostDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var postFromRepo = await _repo.GetPost(id);
+
+            if (currentUserId != postFromRepo.UserId)
+                return Unauthorized();
+
+            _mapper.Map(editPostDto, postFromRepo);
+
+            if (await _repo.SaveAll())
+                return NoContent();
+
+            throw new Exception($"Updating post {id} failed on save");
+        }
+
         [HttpGet]
         [Route("/api/posts/{id}/likes")]
         public async Task<IActionResult> AddLike(int id)

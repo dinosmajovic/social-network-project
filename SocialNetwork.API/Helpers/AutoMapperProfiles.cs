@@ -29,6 +29,7 @@ namespace SocialNetwork.API.Helpers
             CreateMap<Post, PostsDto>();
             CreateMap<Comment, PostCommentsDto>();
             CreateMap<UserForUpdateDto, User>();
+            CreateMap<EditPostDto, Post>();
         }
     }
 }
