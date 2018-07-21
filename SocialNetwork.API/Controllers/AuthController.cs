@@ -68,7 +68,7 @@ namespace SocialNetwork.API.Controllers
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
-
+            Request.HttpContext.Response.Headers.Add("Token", tokenString);
             return Ok(new {tokenString});
         }
 

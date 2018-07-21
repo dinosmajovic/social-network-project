@@ -141,14 +141,16 @@ namespace SocialNetwork.API.Controllers
             if (comment == null)
                 return NoContent();
 
-            if (comment.CommenterId != currentUserId)
+            var usersPost = await _repo.GetPostFromComment(id); 
+            
+            if (comment.CommenterId != currentUserId && currentUserId != usersPost.UserId)
                 return Unauthorized();
-
+        
             _repo.Delete(comment);
 
             if (await _repo.SaveAll())
                 return Ok();
-
+            
             throw new Exception("Failed on save.");            
         }
 

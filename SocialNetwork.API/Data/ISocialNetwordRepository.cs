@@ -21,5 +21,6 @@ namespace SocialNetwork.API.Data
         Task<Comment> GetComment(int id);
 
         Task<User> GetUser(int id);
+        Task<Post> GetPostFromComment(int id);
     }
 }

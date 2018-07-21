@@ -9,14 +9,52 @@ using SocialNetwork.API.Data;
 namespace SocialNetwork.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20180716152440_ExtendedUserClass")]
-    partial class ExtendedUserClass
+    [Migration("20180721164858_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.1-rtm-30846");
+
+            modelBuilder.Entity("SocialNetwork.API.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CommentText");
+
+                    b.Property<int>("CommenterId");
+
+                    b.Property<DateTime>("DateCommented");
+
+                    b.Property<int>("PostId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("PostComments");
+                });
+
+            modelBuilder.Entity("SocialNetwork.API.Models.Like", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("DateLiked");
+
+                    b.Property<int>("LikerId");
+
+                    b.Property<int>("PostId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("PostLikes");
+                });
 
             modelBuilder.Entity("SocialNetwork.API.Models.Photo", b =>
                 {
@@ -38,6 +76,26 @@ namespace SocialNetwork.API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Photos");
+                });
+
+            modelBuilder.Entity("SocialNetwork.API.Models.Post", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Content");
+
+                    b.Property<DateTime>("DatePublished");
+
+                    b.Property<int>("LikesNum");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("SocialNetwork.API.Models.User", b =>
@@ -82,10 +140,34 @@ namespace SocialNetwork.API.Migrations
                     b.ToTable("Values");
                 });
 
+            modelBuilder.Entity("SocialNetwork.API.Models.Comment", b =>
+                {
+                    b.HasOne("SocialNetwork.API.Models.Post")
+                        .WithMany("PostComments")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SocialNetwork.API.Models.Like", b =>
+                {
+                    b.HasOne("SocialNetwork.API.Models.Post", "Post")
+                        .WithMany("PostLikes")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("SocialNetwork.API.Models.Photo", b =>
                 {
                     b.HasOne("SocialNetwork.API.Models.User", "User")
                         .WithMany("Photos")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SocialNetwork.API.Models.Post", b =>
+                {
+                    b.HasOne("SocialNetwork.API.Models.User", "User")
+                        .WithMany("Posts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

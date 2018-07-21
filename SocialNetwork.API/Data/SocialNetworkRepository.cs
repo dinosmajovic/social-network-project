@@ -47,8 +47,6 @@ namespace SocialNetwork.API.Data
         {
             var posts = await _context.Posts
                 .Where(p => p.UserId == id)
-                //.Include(c => c.PostComments)
-                //.Include(l => l.PostLikes)
                 .ToListAsync();
 
             return posts;
@@ -74,6 +72,15 @@ namespace SocialNetwork.API.Data
             var comment = await _context.PostComments.FirstOrDefaultAsync(c => c.Id == id);
 
             return comment;
+        }
+
+        public async Task<Post> GetPostFromComment(int id)
+        {
+            var comment = await _context.PostComments.FirstOrDefaultAsync(c => c.Id == id);
+
+            var post = await _context.Posts.FirstOrDefaultAsync(p => p.Id == comment.PostId);
+
+            return post;
         }
 
         public async Task<Like> GetLike(int postId, int likerId)

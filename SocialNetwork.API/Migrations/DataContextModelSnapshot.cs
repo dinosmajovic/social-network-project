@@ -29,13 +29,9 @@ namespace SocialNetwork.API.Migrations
 
                     b.Property<int>("PostId");
 
-                    b.Property<int?>("UserId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("PostComments");
                 });
@@ -144,14 +140,10 @@ namespace SocialNetwork.API.Migrations
 
             modelBuilder.Entity("SocialNetwork.API.Models.Comment", b =>
                 {
-                    b.HasOne("SocialNetwork.API.Models.Post", "Post")
+                    b.HasOne("SocialNetwork.API.Models.Post")
                         .WithMany("PostComments")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("SocialNetwork.API.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("SocialNetwork.API.Models.Like", b =>
