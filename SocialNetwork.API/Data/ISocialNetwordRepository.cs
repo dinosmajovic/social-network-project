@@ -18,6 +18,8 @@ namespace SocialNetwork.API.Data
         Task<Post> GetPost(int id);
         Task<Like> GetLike(int postId, int likerId);
 
+        Task<Comment> GetComment(int id);
+
         Task<User> GetUser(int id);
     }
 }

@@ -69,6 +69,13 @@ namespace SocialNetwork.API.Data
             return comments;
         }
 
+        public async Task<Comment> GetComment(int id)
+        {
+            var comment = await _context.PostComments.FirstOrDefaultAsync(c => c.Id == id);
+
+            return comment;
+        }
+
         public async Task<Like> GetLike(int postId, int likerId)
         {
             var like = await _context.PostLikes

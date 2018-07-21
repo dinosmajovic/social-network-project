@@ -130,6 +130,28 @@ namespace SocialNetwork.API.Controllers
             throw new Exception("Failed on save.");
         }
 
+        [HttpDelete]
+        [Route("/api/posts/comments/{id}")]
+        
+        public async Task<IActionResult> DeleteComment(int id)
+        {
+            var comment = await _repo.GetComment(id);
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            if (comment == null)
+                return NoContent();
+
+            if (comment.CommenterId != currentUserId)
+                return Unauthorized();
+
+            _repo.Delete(comment);
+
+            if (await _repo.SaveAll())
+                return Ok();
+
+            throw new Exception("Failed on save.");            
+        }
+
         // GET request to get a sigle post by passing the post's id
         [HttpGet]
         [Route("/api/posts/{id}")]
