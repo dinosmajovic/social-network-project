@@ -142,6 +142,28 @@ namespace SocialNetwork.API.Controllers
             return Ok(postToReturn);
         }
 
+        [HttpDelete]
+        [Route("/api/posts/{id}")]
+        public async Task<IActionResult> DeletePost(int id)
+        {
+            var post = await _repo.GetPost(id);
+
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            if (post == null)
+                return StatusCode(204);
+
+            if (currentUserId != post.UserId)
+                return Unauthorized();
+
+            _repo.Delete(post);
+
+            if (await _repo.SaveAll())
+                return StatusCode(200);
+
+            throw new Exception("Failed on save.");
+        }
+
         [HttpGet]
         [Route("/api/posts/{id}/likes")]
         public async Task<IActionResult> AddLike(int id)
@@ -187,7 +209,7 @@ namespace SocialNetwork.API.Controllers
                 _repo.Delete(likeExists);
 
                 if (await _repo.SaveAll())
-                    return StatusCode(201);
+                    return Ok();
             }
 
             throw new Exception("Failed on save.");
