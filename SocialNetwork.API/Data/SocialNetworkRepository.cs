@@ -95,6 +95,11 @@ namespace SocialNetwork.API.Data
         {
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public async Task<Follow> GetFollow(int userId, int recipientId)
+        {
+            return await _context.Followers.FirstOrDefaultAsync(u => u.FollowerId == userId && u.FollowedId == recipientId); 
+        }
     }
 
 }

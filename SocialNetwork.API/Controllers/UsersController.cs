@@ -285,5 +285,33 @@ namespace SocialNetwork.API.Controllers
 
             throw new Exception($"Updating user {id} failed on save");
         }
+
+        [HttpPost("{id}/follow/{recipientId}")]
+        public async Task<IActionResult> FollowUser(int id, int recipientId)
+        {
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+
+            var follow = await _repo.GetFollow(id, recipientId);
+
+            if (follow != null)
+                return BadRequest("You already followed this user");
+
+            if (await _repo.GetUser(recipientId) == null)
+                return NotFound();
+
+            follow = new Follow
+            {
+                FollowerId = id,
+                FollowedId = recipientId
+            };
+
+            _repo.Add<Follow>(follow);
+
+            if (await _repo.SaveAll())
+                return Ok();
+
+            return BadRequest("Failed to add user");
+        }
     }
 }
