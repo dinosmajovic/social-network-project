@@ -9,9 +9,11 @@ using System.Security.Claims;
 using System;
 using Newtonsoft.Json;
 using SocialNetwork.API.Models;
+using SocialNetwork.API.Helpers;
 
 namespace SocialNetwork.API.Controllers
 {
+    [ServiceFilter(typeof(LogUserActivity))]
     [Authorize]
     [Route("api/[controller]")]
     public class UsersController : Controller
