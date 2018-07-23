@@ -30,6 +30,8 @@ namespace SocialNetwork.API.Helpers
             CreateMap<Comment, PostCommentsDto>();
             CreateMap<UserForUpdateDto, User>();
             CreateMap<EditPostDto, Post>();
+            CreateMap<PhotoForCreationDto, Photo>();
+            CreateMap<Photo, PhotoForReturnDto>();
         }
     }
 }

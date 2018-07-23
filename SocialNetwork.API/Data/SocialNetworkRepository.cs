@@ -100,6 +100,13 @@ namespace SocialNetwork.API.Data
         {
             return await _context.Followers.FirstOrDefaultAsync(u => u.FollowerId == userId && u.FollowedId == recipientId); 
         }
+
+        public async Task<Photo> GetPhoto(int id)
+        {
+            var photo = await _context.Photos.FirstOrDefaultAsync(p => p.Id == id);
+
+            return photo;
+        }
     }
 
 }
