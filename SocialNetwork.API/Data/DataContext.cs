@@ -14,6 +14,7 @@ namespace SocialNetwork.API.Data
         public DbSet<Comment> PostComments { get; set; }
         public DbSet<Like> PostLikes {get; set;}
         public DbSet<Follow> Followers {get; set;}
+        public DbSet<Event> Events { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

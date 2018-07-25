@@ -27,6 +27,27 @@ namespace SocialNetwork.API.Controllers
             _repo = repo;
         }
 
+        [HttpPost("events")]
+        public async Task<IActionResult> CreateEvent([FromBody] CreateEventDto createEventDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var eventToCreate = new Event {
+                EventName = createEventDto.EventName,
+                EventDescription = createEventDto.EventDescription,
+                EventOwnerId = currentUserId,
+            };
+
+            _repo.Add(eventToCreate);
+
+            if (await _repo.SaveAll())
+                return StatusCode(201);
+
+            throw new Exception("Failed on save.");
+        }
 
         // GET request to get the id from the current user's token
         [HttpGet("current_user")]

@@ -13,7 +13,7 @@
             formData.set("File", photo);
 
             let xhr = new XMLHttpRequest();
-            xhr.open("POST", 'http://localhost:5000/api/upload/1');
+            xhr.open("POST", 'http://localhost:5000/api/users/1/photos');
             xhr.send(formData);
         }
     </script>

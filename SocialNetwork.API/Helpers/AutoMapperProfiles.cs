@@ -32,6 +32,7 @@ namespace SocialNetwork.API.Helpers
             CreateMap<EditPostDto, Post>();
             CreateMap<PhotoForCreationDto, Photo>();
             CreateMap<Photo, PhotoForReturnDto>();
+            CreateMap<Event, CreateEventDto>();
         }
     }
 }
