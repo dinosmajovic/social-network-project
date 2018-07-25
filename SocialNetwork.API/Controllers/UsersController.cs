@@ -49,6 +49,29 @@ namespace SocialNetwork.API.Controllers
             throw new Exception("Failed on save.");
         }
 
+        [HttpDelete("events/{id}")]
+        public async Task<IActionResult> DeleteEvent(int id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var e = await _repo.GetEvent(id);
+
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var user = await _repo.GetUser(e.EventOwnerId);
+
+            if (user.Id != currentUserId)
+                return Unauthorized();
+
+            _repo.Delete(e);
+
+            if (await _repo.SaveAll())
+                return StatusCode(200);
+
+            throw new Exception("Failed on save.");
+        }
+
         // GET request to get the id from the current user's token
         [HttpGet("current_user")]
         public ActionResult CurrentUser()

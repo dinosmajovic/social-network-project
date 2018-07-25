@@ -24,5 +24,6 @@ namespace SocialNetwork.API.Data
         Task<Post> GetPostFromComment(int id);
         Task<Follow> GetFollow(int userId, int recipientId);
         Task<Photo> GetPhoto(int id);
+        Task<Event> GetEvent(int id);
     }
 }
