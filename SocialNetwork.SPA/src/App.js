@@ -1,37 +1,54 @@
 import React, { Component } from 'react';
+import logo from './logo.svg';
 import './App.css';
-import axios from 'axios';
+import axios from 'axios'
+import Dropzone from 'react-dropzone'
 
 class App extends Component {
-  state = {
-    values: []
-  }
+    constructor() {
+        super()
+        this.state = { 
+          files: [] 
+        }
+      }
+    
+      onDrop(files) {
+        let formData = new FormData();
+        formData.append("File", files);
 
-  componentDidMount() {
-    axios.get('/api/values')
-    .then(response => {
-      console.log(response.data);
-      this.setState({
-        values: response.data
-      })
-    })
-    .catch(error => {
-      console.log(error);
-    })
-  }
-
-  render() {
-    const values = this.state.values.map(value => (
-      <li>{value.id} : {value.name}</li>
-    ))
-    return (
-      <div className="App">
-        <ul>
-          {values}
-        </ul>
-      </div>
-    );
-  }
+        axios({
+          method: 'post',
+          url: '/api/users/1/photos',
+          data: formData,
+          config: { headers: {'Content-Type': 'multipart/form-data' }}
+          })
+          .then((response) => {
+              console.log(response.data);
+          })
+          .catch((response) => {
+              console.log(response);
+          });
+      }
+    
+      render() {
+        return (
+          <section>
+            <div className="dropzone">
+              <Dropzone onDrop={this.onDrop.bind(this)}>
+                <p>Try dropping some files here, or click to select files to upload.</p>
+              </Dropzone>
+            </div>
+            <aside>
+              <h2>Dropped files</h2>
+              <ul>
+                {
+                  this.state.files.map(f => <li key={f.name}>{f.name} - {f.size} bytes</li>)
+                }
+              </ul>
+            </aside>
+          </section>
+        );
+      }
 }
 
 export default App;
