@@ -20,8 +20,7 @@ using SocialNetwork.API.Models;
 namespace SocialNetwork.API.Controllers
 {
     //[Authorize]
-    // [Route("api/users/{userId}/photos")]
-    [Route("api/upload")]
+    [Route("api/users/{userId}/photos")]
     public class PhotosController : Controller
     {
         private readonly ISocialNetworkRepository _repo;
@@ -54,29 +53,8 @@ namespace SocialNetwork.API.Controllers
             return Ok(photo);
         }
 
-        [HttpPost]
+        [HttpPost, DisableRequestSizeLimit]
         [AllowAnonymous]
-        public async Task<IActionResult> Post(List<IFormFile> files)
-        {
-            long size = files.Sum(f => f.Length);
-
-            var filePath = Path.GetTempFileName();
-
-            foreach (var formFile in files)
-            {
-                if (formFile.Length > 0)
-                {
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await formFile.CopyToAsync(stream);
-                    }
-                }
-            }
-
-            return Ok(new { count = files.Count, size, filePath});
-        }
-
-        /*[HttpPost, DisableRequestSizeLimit]
         public async Task<IActionResult> AddPhotoForUser(int userId, PhotoForCreationDto photoDto)
         {
             var user = await _repo.GetUser(userId);
@@ -84,10 +62,10 @@ namespace SocialNetwork.API.Controllers
             if (user == null)
                 return BadRequest("Could not find user");
 
-            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            //var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            if (currentUserId != user.Id)
-                return Unauthorized();
+            // if (currentUserId != user.Id)
+            //     return Unauthorized();
 
             var file = photoDto.File;
 
@@ -103,6 +81,8 @@ namespace SocialNetwork.API.Controllers
 
                     uploadResult = _cloudinary.Upload(uploadParams);
                 }
+            } else {
+                return BadRequest("No image file.");
             }
 
             photoDto.Url = uploadResult.Uri.ToString();
@@ -122,6 +102,6 @@ namespace SocialNetwork.API.Controllers
                 return CreatedAtRoute("GetPhoto", new {id = photo.Id}, photoToReturn);
 
             return BadRequest("Could not add the photo");
-        }*/
+        }
     }
 }
