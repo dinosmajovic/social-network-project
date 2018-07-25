@@ -35,7 +35,7 @@ class App extends Component {
           <section>
             <div className="dropzone">
               <Dropzone onDrop={this.onDrop.bind(this)}>
-                <p>Try dropping some files here, or click to select files to upload.</p>
+                <p>Try dropping some photos here, or click to select photos to upload.</p>
               </Dropzone>
             </div>
             <aside>
