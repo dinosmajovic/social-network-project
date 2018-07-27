@@ -23,6 +23,9 @@ namespace SocialNetwork.API.Models
         public ICollection<Event> Events {get; set;}
         public ICollection<Follow> Follower { get; set; }
         public ICollection<Follow> Followed { get; set; }
+        public ICollection<Message> MessagesSent { get; set; }
+        public ICollection<Message> MessagesRecieved { get; set; }
+
         public User()
         {
             Photos = new Collection<Photo>();

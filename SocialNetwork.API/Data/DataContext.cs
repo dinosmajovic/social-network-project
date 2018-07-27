@@ -15,6 +15,7 @@ namespace SocialNetwork.API.Data
         public DbSet<Like> PostLikes {get; set;}
         public DbSet<Follow> Followers {get; set;}
         public DbSet<Event> Events { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -31,6 +32,16 @@ namespace SocialNetwork.API.Data
                 .HasOne(u => u.Follower)
                 .WithMany(u => u.Followed)
                 .HasForeignKey(u => u.FollowedId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Message>()
+                .HasOne(u => u.Sender)
+                .WithMany(m => m.MessagesSent)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Message>()
+                .HasOne(u => u.Recipient)
+                .WithMany(m => m.MessagesRecieved)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
