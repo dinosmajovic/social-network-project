@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DatingApp.API.Helpers;
+using SocialNetwork.API.Helpers;
 using SocialNetwork.API.Models;
 
 namespace SocialNetwork.API.Data
@@ -25,5 +27,8 @@ namespace SocialNetwork.API.Data
         Task<Follow> GetFollow(int userId, int recipientId);
         Task<Photo> GetPhoto(int id);
         Task<Event> GetEvent(int id);
+        Task<Message> GetMessage(int id);
+        Task<PagedList<Message>> GetMessagesForUser(MessageParams messageParams);
+        Task<IEnumerable<Message>> GetMessageThread(int userId, int recipientId);
     }
 }
