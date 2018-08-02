@@ -86,7 +86,6 @@ namespace SocialNetwork.API
             //seeder.SeedUsers();
             app.UseAuthentication();
             app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials());
-            app.UseHttpsRedirection();
             app.UseMvc();
         }
     }
