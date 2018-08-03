@@ -9,14 +9,15 @@ using SocialNetwork.API.Data;
 namespace SocialNetwork.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20180722081026_FollowEntitry")]
-    partial class FollowEntitry
+    [Migration("20180803085132_mySqlInitial")]
+    partial class mySqlInitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846");
+                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("SocialNetwork.API.Models.Comment", b =>
                 {
@@ -36,6 +37,26 @@ namespace SocialNetwork.API.Migrations
                     b.HasIndex("PostId");
 
                     b.ToTable("PostComments");
+                });
+
+            modelBuilder.Entity("SocialNetwork.API.Models.Event", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("EventDescription");
+
+                    b.Property<string>("EventName");
+
+                    b.Property<int>("EventOwnerId");
+
+                    b.Property<int?>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("SocialNetwork.API.Models.Follow", b =>
@@ -69,6 +90,36 @@ namespace SocialNetwork.API.Migrations
                     b.ToTable("PostLikes");
                 });
 
+            modelBuilder.Entity("SocialNetwork.API.Models.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Content");
+
+                    b.Property<DateTime?>("DateRead");
+
+                    b.Property<bool>("IsRead");
+
+                    b.Property<DateTime>("MessageSent");
+
+                    b.Property<bool>("RecipientDeleted");
+
+                    b.Property<int>("RecipientId");
+
+                    b.Property<bool>("SenderDeleted");
+
+                    b.Property<int>("SenderId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipientId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Messages");
+                });
+
             modelBuilder.Entity("SocialNetwork.API.Models.Photo", b =>
                 {
                     b.Property<int>("Id")
@@ -79,6 +130,8 @@ namespace SocialNetwork.API.Migrations
                     b.Property<string>("Description");
 
                     b.Property<bool>("IsMain");
+
+                    b.Property<string>("PublicId");
 
                     b.Property<string>("Url");
 
@@ -161,6 +214,13 @@ namespace SocialNetwork.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("SocialNetwork.API.Models.Event", b =>
+                {
+                    b.HasOne("SocialNetwork.API.Models.User")
+                        .WithMany("Events")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("SocialNetwork.API.Models.Follow", b =>
                 {
                     b.HasOne("SocialNetwork.API.Models.User", "Follower")
@@ -180,6 +240,19 @@ namespace SocialNetwork.API.Migrations
                         .WithMany("PostLikes")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SocialNetwork.API.Models.Message", b =>
+                {
+                    b.HasOne("SocialNetwork.API.Models.User", "Recipient")
+                        .WithMany("MessagesRecieved")
+                        .HasForeignKey("RecipientId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SocialNetwork.API.Models.User", "Sender")
+                        .WithMany("MessagesSent")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("SocialNetwork.API.Models.Photo", b =>

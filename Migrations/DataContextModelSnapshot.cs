@@ -14,7 +14,8 @@ namespace SocialNetwork.API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846");
+                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("SocialNetwork.API.Models.Comment", b =>
                 {
