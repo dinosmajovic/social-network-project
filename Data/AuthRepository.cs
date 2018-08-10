@@ -12,6 +12,13 @@ namespace SocialNetwork.API.Data
         {
             _context = context;
         }
+
+        public async Task<Photo> GetProfilePhoto(int id) {
+            var photo = await _context.Photos.FirstOrDefaultAsync(p => p.UserId == id && p.IsMain);
+
+            return photo;
+        }
+
         public async Task<User> Login(string username, string password)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == username);

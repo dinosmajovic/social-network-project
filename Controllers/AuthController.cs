@@ -53,6 +53,8 @@ namespace SocialNetwork.API.Controllers
             if (userFromRepo == null)
                 return Unauthorized();
 
+            var profilePhoto = await _repo.GetProfilePhoto(userFromRepo.Id);
+
             // generate token
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_config.GetSection("AppSettings:Token").Value);
@@ -61,7 +63,8 @@ namespace SocialNetwork.API.Controllers
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
-                    new Claim(ClaimTypes.Name, userFromRepo.Username)
+                    new Claim(ClaimTypes.Name, userFromRepo.Username),
+                    profilePhoto != null ? new Claim(ClaimTypes.Actor, profilePhoto.Url) : null
                 }),
                 Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
@@ -69,7 +72,7 @@ namespace SocialNetwork.API.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
             Request.HttpContext.Response.Headers.Add("Token", tokenString);
-            return Ok(new {tokenString});
+            return Ok(new {tokenString});   
         }
 
     }
