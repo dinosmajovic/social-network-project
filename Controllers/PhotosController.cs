@@ -62,10 +62,10 @@ namespace SocialNetwork.API.Controllers
             if (user == null)
                 return BadRequest("Could not find user");
 
-            //var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-            // if (currentUserId != user.Id)
-            //     return Unauthorized();
+            if (currentUserId != user.Id)
+                 return Unauthorized();
 
             var file = photoDto.File;
 
@@ -91,8 +91,8 @@ namespace SocialNetwork.API.Controllers
             var photo = _mapper.Map<Photo>(photoDto);
             photo.User = user;
 
-            if (!user.Photos.Any(m => m.IsMain))
-                photo.IsMain = true;
+            // if (!user.Photos.Any(m => m.IsMain))
+            photo.IsMain = true;
 
             user.Photos.Add(photo);
 
