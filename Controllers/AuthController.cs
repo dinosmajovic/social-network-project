@@ -64,7 +64,7 @@ namespace SocialNetwork.API.Controllers
                 {
                     new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
                     new Claim(ClaimTypes.Name, userFromRepo.Username),
-                    profilePhoto != null ? new Claim(ClaimTypes.Actor, profilePhoto.Url) : null
+                    profilePhoto != null ? new Claim(ClaimTypes.Actor, profilePhoto.Url) : new Claim(ClaimTypes.Actor, "http://sg-fs.com/wp-content/uploads/2017/08/user-placeholder.png")
                 }),
                 Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
