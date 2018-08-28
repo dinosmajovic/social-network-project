@@ -157,6 +157,11 @@ namespace SocialNetwork.API.Data
 
             return messages;
         }
+
+        public async Task<IEnumerable<Photo>> GetPhotosForUser(int userId) {
+            var photos = await _context.Photos.Where(p => p.Id == userId).ToListAsync();
+            return photos;
+        }
     }
 
 }
