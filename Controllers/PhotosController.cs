@@ -43,14 +43,14 @@ namespace SocialNetwork.API.Controllers
       _cloudinary = new Cloudinary(acc);
     }
 
-    [HttpGet(Name = "GetPhoto")]
+    [HttpGet("{id}", Name = "GetPhoto")]
     public async Task<IActionResult> GetPhoto(int id)
     {
-      var photoFromRepo = await _repo.GetPhotosForUser(id);
+      var photoFromRepo = await _repo.GetPhoto(id);
 
-      //   var photo = _mapper.Map<PhotoForReturnDto>(photoFromRepo);
+      var photo = _mapper.Map<PhotoForReturnDto>(photoFromRepo);
 
-      return Ok(photoFromRepo);
+      return Ok(photo);
     }
 
     [HttpPost, DisableRequestSizeLimit]
