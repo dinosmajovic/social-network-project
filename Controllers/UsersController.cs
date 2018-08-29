@@ -27,6 +27,15 @@ namespace SocialNetwork.API.Controllers
       _repo = repo;
     }
 
+    [HttpGet("feed")]
+    public async Task<IActionResult> GetFeed()
+    {
+      var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+      var feed = await _repo.GetFeed(currentUserId);
+
+      return Ok(feed);
+    }
+
     [HttpPost("events")]
     public async Task<IActionResult> CreateEvent([FromBody] CreateEventDto createEventDto)
     {

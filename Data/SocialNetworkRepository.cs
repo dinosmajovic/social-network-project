@@ -162,6 +162,14 @@ namespace SocialNetwork.API.Data
     {
         return _context.Photos.Where(u => u.UserId == userId).FirstOrDefaultAsync(p => p.IsMain);
     }
+
+    public async Task<IEnumerable<Follow>> GetFeed(int userId)
+    {
+        var users = await _context.Followers.Where(u => u.FollowedId == userId).ToListAsync();
+
+        return users;
+    }
+
     }
 
 }
