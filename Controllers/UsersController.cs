@@ -374,5 +374,27 @@ namespace SocialNetwork.API.Controllers
 
       return BadRequest("Failed to add user");
     }
+
+    [HttpPost("{id}/unfollow/{recipientId}")]
+    public async Task<IActionResult> UnfollowUser(int id, int recipientId)
+    {
+      if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+        return Unauthorized();
+
+      var follow = await _repo.GetFollow(id, recipientId);
+
+      if (follow == null)
+        return BadRequest("You don't follow this user");
+
+      if (await _repo.GetUser(recipientId) == null)
+        return NotFound();
+
+      _repo.Delete<Follow>(follow);
+
+      if (await _repo.SaveAll())
+        return Ok();
+
+      return BadRequest("Failed to unfollow user");
+    }
   }
 }
