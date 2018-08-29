@@ -163,6 +163,11 @@ namespace SocialNetwork.API.Data
       var photos = await _context.Photos.Include(p => p.Id == userId).ToListAsync();
       return photos;
     }
-  }
+
+    public Task<Photo> GetMainPhotoForUser(int userId)
+    {
+        return _context.Photos.Where(u => u.UserId == userId).FirstOrDefaultAsync(p => p.IsMain);
+    }
+    }
 
 }

@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -17,10 +18,12 @@ namespace SocialNetwork.API.Controllers
     {
         private readonly IAuthRepository _repo;
         private readonly IConfiguration _config;
-        public AuthController(IAuthRepository repo, IConfiguration config)
+        private readonly IMapper _mapper;
+        public AuthController(IAuthRepository repo, IConfiguration config, IMapper mapper)
         {
             _config = config;
             _repo = repo;
+            _mapper = mapper;
         }
 
         [HttpPost("register")]
@@ -53,8 +56,6 @@ namespace SocialNetwork.API.Controllers
             if (userFromRepo == null)
                 return Unauthorized();
 
-            var profilePhoto = await _repo.GetProfilePhoto(userFromRepo.Id);
-
             // generate token
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_config.GetSection("AppSettings:Token").Value);
@@ -63,8 +64,7 @@ namespace SocialNetwork.API.Controllers
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
-                    new Claim(ClaimTypes.Name, userFromRepo.Username),
-                    profilePhoto != null ? new Claim(ClaimTypes.Actor, profilePhoto.Url) : new Claim(ClaimTypes.Actor, "http://sg-fs.com/wp-content/uploads/2017/08/user-placeholder.png")
+                    new Claim(ClaimTypes.Name, userFromRepo.Username)
                 }),
                 Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
@@ -72,7 +72,10 @@ namespace SocialNetwork.API.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
             Request.HttpContext.Response.Headers.Add("Token", tokenString);
-            return Ok(new {tokenString});   
+
+            var user = _mapper.Map<UserForListDto>(userFromRepo);
+
+            return Ok(new {tokenString, user});   
         }
 
     }
