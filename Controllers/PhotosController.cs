@@ -90,8 +90,8 @@ namespace SocialNetwork.API.Controllers
 
       photoDto.Url = uploadResult.Uri.ToString();
       photoDto.PublicId = uploadResult.PublicId;
-      photoDto.Width = uploadResult.Width;
-      photoDto.Height = uploadResult.Height;
+    //   photoDto.Width = uploadResult.Width;
+    //   photoDto.Height = uploadResult.Height;
 
       var photo = _mapper.Map<Photo>(photoDto);
       photo.User = user;
