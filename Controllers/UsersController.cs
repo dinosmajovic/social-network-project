@@ -396,5 +396,23 @@ namespace SocialNetwork.API.Controllers
 
       return BadRequest("Failed to unfollow user");
     }
+
+    [HttpPost("{id}/isFollowing/{recipientId}")]
+    public async Task<IActionResult> isFollowing(int id, int recipientId)
+    {
+      if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+        return Unauthorized();
+
+      var follow = await _repo.GetFollow(id, recipientId);
+      
+      if (await _repo.GetUser(recipientId) == null)
+        return NotFound();
+
+      if (follow == null)
+        return Ok(false);
+
+      return Ok(true);
+    }
+
   }
 }
