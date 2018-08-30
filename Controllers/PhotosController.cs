@@ -90,6 +90,8 @@ namespace SocialNetwork.API.Controllers
 
       photoDto.Url = uploadResult.Uri.ToString();
       photoDto.PublicId = uploadResult.PublicId;
+      photoDto.Width = uploadResult.Width;
+      photoDto.Height = uploadResult.Height;
 
       var photo = _mapper.Map<Photo>(photoDto);
       photo.User = user;
@@ -143,9 +145,6 @@ namespace SocialNetwork.API.Controllers
 
       if (photoFromRepo == null) 
         return NotFound();
-
-      if (photoFromRepo.IsMain) 
-        return BadRequest("You cannot delete the main photo");
 
       var deleteParams = new DeletionParams(photoFromRepo.PublicId);
 

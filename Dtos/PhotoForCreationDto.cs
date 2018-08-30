@@ -10,6 +10,8 @@ namespace SocialNetwork.API.Dtos
         public string Description { get; set; }
         public DateTime DateAdded { get; set; }
         public string PublicId { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
         public PhotoForCreationDto()
         {
             DateAdded = DateTime.Now;
