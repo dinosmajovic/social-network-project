@@ -32,8 +32,8 @@ namespace SocialNetwork.API.Data
     Task<IEnumerable<Message>> GetMessageThread(int userId, int recipientId);
     Task<Photo> GetMainPhotoForUser(int userId);
     Task<IEnumerable<Post>> GetFeed(int userId);
-    Task<IEnumerable<Follow>> GetFollowers(int userId);
-    Task<IEnumerable<Follow>> GetFollowed(int userId);
+    Task<IEnumerable<string>> GetFollowers(int userId);
+    Task<IEnumerable<int>> GetFollowed(int userId);
 
   }
 }
