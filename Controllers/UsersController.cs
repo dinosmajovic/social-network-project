@@ -36,20 +36,18 @@ namespace SocialNetwork.API.Controllers
       return Ok(feed);
     }
 
-    [HttpGet("followers")]
-    public async Task<IActionResult> GetFollowers()
+    [HttpGet("{id}/followers")]
+    public async Task<IActionResult> GetFollowers(int id)
     {
-      var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-      var followers = await _repo.GetFollowers(currentUserId);
+      var followers = await _repo.GetFollowers(id);
 
       return Ok(followers);
     }
 
-    [HttpGet("followed")]
-    public async Task<IActionResult> GetFollowed()
+    [HttpGet("{id}/followed")]
+    public async Task<IActionResult> GetFollowed(int id)
     {
-      var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-      var followers = await _repo.GetFollowed(currentUserId);
+      var followers = await _repo.GetFollowed(id);
 
       return Ok(followers);
     }
