@@ -404,7 +404,7 @@ namespace SocialNetwork.API.Controllers
         return Unauthorized();
 
       var follow = await _repo.GetFollow(id, recipientId);
-      
+
       if (await _repo.GetUser(recipientId) == null)
         return NotFound();
 

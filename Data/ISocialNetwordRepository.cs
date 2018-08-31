@@ -31,6 +31,6 @@ namespace SocialNetwork.API.Data
     Task<PagedList<Message>> GetMessagesForUser(MessageParams messageParams);
     Task<IEnumerable<Message>> GetMessageThread(int userId, int recipientId);
     Task<Photo> GetMainPhotoForUser(int userId);
-    Task<IEnumerable<int>> GetFeed(int userId);
+    Task<IEnumerable<Post>> GetFeed(int userId);
   }
 }

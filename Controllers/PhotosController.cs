@@ -90,14 +90,18 @@ namespace SocialNetwork.API.Controllers
 
       photoDto.Url = uploadResult.Uri.ToString();
       photoDto.PublicId = uploadResult.PublicId;
-    //   photoDto.Width = uploadResult.Width;
-    //   photoDto.Height = uploadResult.Height;
+      //   photoDto.Width = uploadResult.Width;
+      //   photoDto.Height = uploadResult.Height;
 
       var photo = _mapper.Map<Photo>(photoDto);
       photo.User = user;
 
-      if (!user.Photos.Any(m => m.IsMain))
-        photo.IsMain = true;
+      var currentMainPhoto = await _repo.GetMainPhotoForUser(userId);
+
+      if (currentMainPhoto != null)
+        currentMainPhoto.IsMain = false;
+
+      photo.IsMain = true;
 
       user.Photos.Add(photo);
 
@@ -117,10 +121,10 @@ namespace SocialNetwork.API.Controllers
 
       var photoFromRepo = await _repo.GetPhoto(id);
 
-      if (photoFromRepo == null) 
+      if (photoFromRepo == null)
         return NotFound();
 
-      if (photoFromRepo.IsMain) 
+      if (photoFromRepo.IsMain)
         return BadRequest("This is already the main photo");
 
       var currentMainPhoto = await _repo.GetMainPhotoForUser(userId);
@@ -137,13 +141,14 @@ namespace SocialNetwork.API.Controllers
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeletePhoto(int userId, int id) {
+    public async Task<IActionResult> DeletePhoto(int userId, int id)
+    {
       if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
         return Unauthorized();
 
       var photoFromRepo = await _repo.GetPhoto(id);
 
-      if (photoFromRepo == null) 
+      if (photoFromRepo == null)
         return NotFound();
 
       var deleteParams = new DeletionParams(photoFromRepo.PublicId);
