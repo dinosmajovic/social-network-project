@@ -169,7 +169,6 @@ namespace SocialNetwork.API.Data
         .Where(u => u.FollowedId == userId).Select(u => u.FollowerId).ToListAsync();
 
       var posts = await _context.Posts.Where(t => users.Contains(t.UserId)).ToListAsync();
-
       return users;
     }
 
