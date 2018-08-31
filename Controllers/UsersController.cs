@@ -36,6 +36,24 @@ namespace SocialNetwork.API.Controllers
       return Ok(feed);
     }
 
+    [HttpGet("followers")]
+    public async Task<IActionResult> GetFollowers()
+    {
+      var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+      var followers = await _repo.GetFollowers(currentUserId);
+
+      return Ok(followers);
+    }
+
+    [HttpGet("followers")]
+    public async Task<IActionResult> GetFollowed()
+    {
+      var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+      var followers = await _repo.GetFollowed(currentUserId);
+
+      return Ok(followers);
+    }
+
     [HttpPost("events")]
     public async Task<IActionResult> CreateEvent([FromBody] CreateEventDto createEventDto)
     {

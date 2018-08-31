@@ -172,6 +172,18 @@ namespace SocialNetwork.API.Data
       return posts;
     }
 
+    public async Task<IEnumerable<Follow>> GetFollowers(int userId)
+    {
+      var followers = await _context.Followers.Where(u => u.FollowedId == userId).ToListAsync();
+      return followers;
+    }
+
+    public async Task<IEnumerable<Follow>> GetFollowed(int userId)
+    {
+      var followers = await _context.Followers.Where(u => u.FollowerId == userId).ToListAsync();
+
+      return followers;
+    }
   }
 
 }
