@@ -45,7 +45,7 @@ namespace SocialNetwork.API.Controllers
       return Ok(followers);
     }
 
-    [HttpGet("followers")]
+    [HttpGet("followed")]
     public async Task<IActionResult> GetFollowed()
     {
       var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
